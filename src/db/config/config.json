@@ -4,7 +4,7 @@
     "password": null,
     "database": "antisocial",
     "host": "data/antisocial.db",
-    "dialect": "sqlite3"
+    "dialect": "sqlite"
   },
   "test": {
     "username": "root",

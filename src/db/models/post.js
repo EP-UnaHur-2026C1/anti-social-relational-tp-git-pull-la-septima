@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Post.init({
-    texto: { data: DataTypes.STRING, max: 255 },
+    texto: { type: DataTypes.STRING, max: 255 },
     fechaPublicacion: DataTypes.DATEONLY
   }, {
     sequelize,

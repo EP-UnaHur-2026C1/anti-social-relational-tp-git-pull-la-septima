@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   User.init({
-    nombre: {data : DataTypes.STRING, max: 50},
-    nickname: { type: DataTypes.STRING, unique: true }
+    nombre: {type : DataTypes.STRING, max: 50},
+    nickname: {type: DataTypes.STRING, unique: true }
   }, {
     sequelize,
     modelName: 'User',

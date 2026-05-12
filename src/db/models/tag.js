@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Tag.init({
-    nombre: {data : DataTypes.STRING, max: 100}
+    nombre: {type : DataTypes.STRING, max: 100}
   }, {
     sequelize,
     modelName: 'Tag',
