@@ -14,12 +14,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Comment.init({
-    comentario: { type: DataTypes.STRING, max: 255 },
-    fecha_publicacion: DataTypes.DATEONLY,
-    visible: DataTypes.BOOLEAN
+    comentario: { type: DataTypes.STRING, max: 255, allowNull: false },
+    fecha_publicacion: { type: DataTypes.DATEONLY, allowNull: false },
+    visible: { type: DataTypes.BOOLEAN, defaultValue: true }
   }, {
     sequelize,
     modelName: 'Comment',
+    timestamps: false
   });
   return Comment;
 };

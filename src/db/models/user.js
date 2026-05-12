@@ -14,11 +14,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   User.init({
-    nombre: {type : DataTypes.STRING, max: 50},
-    nickname: {type: DataTypes.STRING, unique: true }
-  }, {
+    nickname: {type: DataTypes.STRING, unique: true, primaryKey: true, allowNull: false},
+  }, 
+  {
     sequelize,
     modelName: 'User',
+    timestamps: false
   });
   return User;
 };
