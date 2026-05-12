@@ -14,11 +14,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Post.init({
-    texto: { type: DataTypes.STRING, max: 255 },
-    fechaPublicacion: DataTypes.DATEONLY
+    texto: { type: DataTypes.STRING, max: 255, allowNull: false },
+    fechaPublicacion: { type: DataTypes.DATEONLY, allowNull: false }
   }, {
     sequelize,
     modelName: 'Post',
+    timestamps: false
   });
   return Post;
 };

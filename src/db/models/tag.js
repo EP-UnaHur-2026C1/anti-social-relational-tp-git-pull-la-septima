@@ -14,10 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Tag.init({
-    nombre: {type : DataTypes.STRING, max: 100}
+    nombre: {type : DataTypes.STRING, max: 100, allowNull: false},
   }, {
     sequelize,
     modelName: 'Tag',
+    timestamps: false
   });
   return Tag;
 };
