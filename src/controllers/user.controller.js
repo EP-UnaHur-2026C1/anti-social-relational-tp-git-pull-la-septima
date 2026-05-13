@@ -8,15 +8,29 @@ const createUser = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
-    const id = req.params.id;
+    const nickname = req.params.nickname;
     const datosUsuario = req.body;
-    const usuarioActualizado = await User.update(datosUsuario, {
-        where: { id }
+    const usuarioActualizado = await User.update(datosUsuario.nickname, {
+        where: { nickname }
     });
-    res.status(200).json(usuarioActualizado);
+    res.status(200).json(datosUsuario);
+    return 
+}
+
+const deleteUser = async(req,res) => {
+    try {
+        const nickname = req.params.nickname;
+        const deleteUser = await User.destroy({where : {nickname}});
+        res.status(200).json(nickname);
+        return 
+    }catch{
+        return res.status(500).json({message: "error interno del servidor "});
+    }
+    
 }
 
 module.exports = {
     createUser,
-    updateUser
+    updateUser,
+    deleteUser
 }
