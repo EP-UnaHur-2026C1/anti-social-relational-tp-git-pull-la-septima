@@ -2,11 +2,13 @@ const express = require('express');
 const app = express();
 const {sequelize} = require('./db/models')
 const dotenv = require('dotenv');
-const { FORCE } = require('sequelize/lib/index-hints');
+const userRouter = require('./routes/user.routes');
 dotenv.config()
 const PORT = process.env.PORT || 3001
 
 app.use(express.json())
+
+app.use('/users', userRouter)
 
 app.listen(PORT, async (err)=> {
     if(err) {
