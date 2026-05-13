@@ -10,12 +10,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      User.hasMany(models.Post,{foreignKey : 'user_nickname', as : 'posts'} ),
-      User.hasMany(models.Comment, {foreignKey : 'user_nickname', as : 'comments'})
+      User.hasMany(models.Post,{foreignKey : 'id_user', as : 'posts'} ),
+      User.hasMany(models.Comment, {foreignKey : 'id_user', as : 'comments'})
     }
   }
   User.init({
-    nickname: {type: DataTypes.STRING, unique: true, primaryKey: true, allowNull: false},
+    id: {
+      type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    nickname: {type: DataTypes.STRING, unique: true, allowNull: false},
   }, 
   {
     sequelize,
