@@ -1,20 +1,31 @@
 const { User } = require("../db/models");
 
 const createUser = async (req, res) => {
-
-    const datosUsuario = req.body;
-    const usuarioCreado = await User.create(datosUsuario);
-    res.status(201).json(usuarioCreado);
+    try {
+        const datosUsuario = req.body;
+        const usuarioCreado = await User.create(datosUsuario);
+        res.status(201).json(usuarioCreado);
+    }catch(err)
+    {
+        res.status(500).json({message: `${err}`});
+        return
+    }
 }
 
 const updateUser = async (req, res) => {
-    const id = req.params.id;
-    const datosUsuario = req.body;
-    const usuarioActualizado = await User.update(datosUsuario, {
-        where: { id }
-    });
-    res.status(200).json(datosUsuario);
-    return 
+    try {
+        const id = req.params.id;
+        const datosUsuario = req.body;
+        const usuarioActualizado = await User.update(datosUsuario, {
+            where: { id }
+        });
+        res.status(200).json(datosUsuario);
+        return 
+    }catch(err)
+    {
+        res.status(500).json({message: `${err}`});
+        return
+    }
 }
 
 const deleteUser = async(req,res) => {
@@ -45,7 +56,17 @@ const getUserById = async(req, res) => {
     }
 }
 
-
+const getAllUsers = async (_, res) => {
+    try {
+        const users = await User.findAll()
+        res.status(200).json(users)
+        return
+    }catch(err)
+    {
+        res.status(500).json({message: `${err}`});
+        return
+    }
+}
 
 
 
@@ -53,5 +74,6 @@ module.exports = {
     createUser,
     updateUser,
     deleteUser,
-    getUserById
+    getUserById,
+    getAllUsers
 }
