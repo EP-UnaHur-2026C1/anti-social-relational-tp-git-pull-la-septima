@@ -15,6 +15,15 @@ module.exports = {
       fechaPublicacion: {
         type: Sequelize.DATE
       },
+      id_user: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'id'
+        },
+        onDelete: 'CASCADE'
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

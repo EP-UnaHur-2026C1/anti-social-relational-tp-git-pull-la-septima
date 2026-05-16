@@ -14,7 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Post_Images.init({
-    url_image: { type: DataTypes.STRING, allowNull: false }
+    url_image: { type: DataTypes.STRING, allowNull: false },
+    id_post: { type: DataTypes.INTEGER, allowNull: false}
   }, {
     sequelize,
     modelName: 'Post_Images',

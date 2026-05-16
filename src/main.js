@@ -3,18 +3,20 @@ const app = express();
 const {sequelize} = require('./db/models')
 const dotenv = require('dotenv');
 const userRouter = require('./routes/user.routes');
+const postRouter = require('./routes/post.routes');
 dotenv.config()
 const PORT = process.env.PORT || 3001
 
 app.use(express.json())
 
 app.use('/users', userRouter)
+app.use('/posts', postRouter)
 
 app.listen(PORT, async (err)=> {
     if(err) {
         console.error(err.message)
         process.exit(1)
     }
-    await sequelize.sync({force: true})
+    await sequelize.sync({alter: true})
     console.log(`App iniciada en el puerto ${PORT}`)
 })
