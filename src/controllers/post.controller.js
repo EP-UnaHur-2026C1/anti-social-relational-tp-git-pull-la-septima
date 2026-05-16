@@ -26,6 +26,21 @@ const createPost = async (req, res) => {
     }
 }
 
+const deletePost = async (req, res) => {
+    try{
+        const { idDel } = req.params
+        const post = await Post.findByPk(idDel);
+        const deletePost = await Post.destroy({where : {idDel}});
+        res.status(200).json({message: `Post eliminado correctamente`}); 
+        return 
+    }catch(err)
+    {
+        res.status(500).json({message: `${err}`});
+        return
+    }
+}
+
 module.exports = {
-    createPost
+    createPost,
+    deletePost
 }
