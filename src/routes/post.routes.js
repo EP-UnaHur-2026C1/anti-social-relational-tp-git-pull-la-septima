@@ -3,6 +3,6 @@ const router = Router();
 const { createPost, deletePost } = require('../controllers/post.controller')
 
 router.post('/:id_user', createPost);
-router.delete('/:idDel', deletePost);
+router.delete('/:id', deletePost);
 
 module.exports = router;
