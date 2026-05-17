@@ -79,11 +79,27 @@ const getOnePostByUser= async (req, res) => {
     }
 }
 
+const updatePostByUser = async (req ,res ){
+    try{
+        const id = req.params.id;
+        const id_post = req.params.id_post;
+        const { texto } = req.body;
+        const post = await Post.findOne({ where : {id_user : id, id: id_post}});
+        await post.update({ texto });
+        res.status(200).json(post);
+        return
+    }catch(err)
+    {
+        res.status(500).json({message: `${err}`});
+        return  
+    }
+}
 
 module.exports = {
     createPost,
     deletePost,
     getPosts,
     getAllPostsByUser,
-    getOnePostByUser
+    getOnePostByUser,
+    updatePostByUser
 }
