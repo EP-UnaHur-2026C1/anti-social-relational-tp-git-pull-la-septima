@@ -40,7 +40,7 @@ const deletePost = async (req, res) => {
     }
 }
 
-const getPosts = async (req, res) => {
+const getPosts = async (_, res) => {
     try {
         const posts = await Post.findAll({ include : ['images']});
         res.status(200).json(posts);
@@ -52,11 +52,24 @@ const getPosts = async (req, res) => {
     } 
 }
 
+const getAllPostsByUser = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const posts = await Post.findAll({ where : {id_user : id}, include : ['images']});
+        res.status(200).json(posts);
+        return
+    }catch(err)
+    {
+        res.status(500).json({message: `${err}`});
+        return
+    }   
+}
 
 
 
 module.exports = {
     createPost,
     deletePost,
-    getPosts
+    getPosts,
+    getAllPostsByUser
 }
