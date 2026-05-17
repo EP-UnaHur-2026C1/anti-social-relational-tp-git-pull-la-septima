@@ -4,6 +4,7 @@ const {sequelize} = require('./db/models')
 const dotenv = require('dotenv');
 const userRouter = require('./routes/user.routes');
 const postRouter = require('./routes/post.routes');
+const { FORCE } = require('sequelize/lib/index-hints');
 dotenv.config()
 const PORT = process.env.PORT || 3001
 

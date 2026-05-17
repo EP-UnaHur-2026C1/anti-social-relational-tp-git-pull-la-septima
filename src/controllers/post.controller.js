@@ -40,7 +40,23 @@ const deletePost = async (req, res) => {
     }
 }
 
+const getPosts = async (req, res) => {
+    try {
+        const posts = await Post.findAll({ include : ['images']});
+        res.status(200).json(posts);
+        return
+    }catch(err)
+    {
+        res.status(500).json({message: `${err}`});
+        return
+    } 
+}
+
+
+
+
 module.exports = {
     createPost,
-    deletePost
+    deletePost,
+    getPosts
 }
