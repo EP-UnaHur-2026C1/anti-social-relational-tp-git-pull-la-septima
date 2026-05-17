@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { now } = require('sequelize/lib/utils');
 module.exports = (sequelize, DataTypes) => {
   class Post extends Model {
     /**
@@ -13,11 +14,13 @@ module.exports = (sequelize, DataTypes) => {
       Post.belongsTo(models.User, {foreignKey : 'id_user', as : 'user'}),
       Post.hasMany(models.Post_Images, {foreignKey : 'id_post', as : 'images'}),
       Post.hasMany(models.Comment, { foreignKey : 'id_post', as : 'comments'})
-      Post.belongsToMany(models.Tag, { through : 'post_tag', foreignKey : 'id_post', as : 'tags'})
+      Post.belongsToMany(models.Tag, { through : 'post_tag', as : 'tags'})
     }
   }
   Post.init({
+    id : { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     texto: { type: DataTypes.STRING, max: 255, allowNull: false },
+    id_user: { type: DataTypes.INTEGER, allowNull: false},
     fechaPublicacion: { type: DataTypes.DATEONLY, allowNull: false }
   }, {
     sequelize,
