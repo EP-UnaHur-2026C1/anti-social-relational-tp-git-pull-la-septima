@@ -65,11 +65,25 @@ const getAllPostsByUser = async (req, res) => {
     }   
 }
 
+const getOnePostByUser= async (req, res) => {
+    try {
+        const id = req.params.id;
+        const id_post = req.params.id_post;
+        const post = await Post.findOne({ where : {id_user : id, id: id_post}, include : ['images']});
+        res.status(200).json(post);
+        return
+    }catch(err)
+    {
+        res.status(500).json({message: `${err}`});
+        return
+    }
+}
 
 
 module.exports = {
     createPost,
     deletePost,
     getPosts,
-    getAllPostsByUser
+    getAllPostsByUser,
+    getOnePostByUser
 }
