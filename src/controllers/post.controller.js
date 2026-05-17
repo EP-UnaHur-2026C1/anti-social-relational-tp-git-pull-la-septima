@@ -79,7 +79,7 @@ const getOnePostByUser= async (req, res) => {
     }
 }
 
-const updatePostByUser = async (req ,res ){
+const updatePostByUser = async (req ,res ) =>{
     try{
         const id = req.params.id;
         const id_post = req.params.id_post;
