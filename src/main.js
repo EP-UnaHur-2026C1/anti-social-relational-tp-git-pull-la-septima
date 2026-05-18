@@ -20,6 +20,6 @@ app.listen(PORT, async (err)=> {
         console.error(err.message)
         process.exit(1)
     }
-    await sequelize.sync({alter: true})
+    await sequelize.sync({force: true})
     console.log(`App iniciada en el puerto ${PORT}`)
 })
