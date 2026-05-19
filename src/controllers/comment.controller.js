@@ -22,6 +22,20 @@ const createComment = async (req, res) => {
     }
 }
 
+const getCommentsByPost = async (req, res) => {
+    try {
+        const id_post = req.params.id_post;
+        const comments = await Comment.findAll({ where : {id_post}});
+        res.status(200).json(comments);
+        return 
+    }   
+    catch(err){
+        res.status(500).json({message: `${err}`});
+        return  
+    }       
+}
+
 module.exports = {
-    createComment
+    createComment,
+    getCommentsByPost
 }
