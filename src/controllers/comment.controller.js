@@ -1,3 +1,4 @@
+const { where } = require('sequelize');
 const { Comment } = require('../db/models');
 
 const createComment = async (req, res) => {
@@ -13,7 +14,7 @@ const createComment = async (req, res) => {
             id_post
         })
 
-        res.status(201).json(comentario)
+        res.status(201).json({message: "El comentario fue agregado correctamente"});
         return 
 
     }catch(err){
@@ -35,7 +36,22 @@ const getCommentsByPost = async (req, res) => {
     }       
 }
 
+const deleteComment = async (req, res) => {
+    try {
+        const id = req.params.id; 
+        const comment = await Comment.findByPk(id);
+        const commentDeleted = await comment.destroy({where : {id}});
+        res.status(200).json({message: ` El Comentario : ${comment.comentario} eliminado`});
+        return 
+    }catch(err){
+        res.status(500).json({message: `${err}`});
+        return  
+    }
+}       
+  
+
 module.exports = {
     createComment,
-    getCommentsByPost
+    getCommentsByPost,
+    deleteComment
 }
