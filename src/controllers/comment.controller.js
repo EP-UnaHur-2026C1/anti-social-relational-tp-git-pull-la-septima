@@ -47,11 +47,25 @@ const deleteComment = async (req, res) => {
         res.status(500).json({message: `${err}`});
         return  
     }
-}       
-  
+}   
+
+const updateComment = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { comentario } = req.body;
+        const comment = await Comment.findByPk(id);
+        const commentUpdated = await comment.update({comentario}, {where : {id}});
+        res.status(200).json({message: ` El Comentario : ${commentUpdated.comentario} actualizado`});
+        return 
+    }catch(err){
+        res.status(500).json({message: `${err}`});
+        return  
+    }   
+} 
 
 module.exports = {
     createComment,
     getCommentsByPost,
-    deleteComment
+    deleteComment,          
+    updateComment
 }
