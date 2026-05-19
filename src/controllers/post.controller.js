@@ -42,7 +42,7 @@ const deletePost = async (req, res) => {
 
 const getPosts = async (_, res) => {
     try {
-        const posts = await Post.findAll({ include : ['images']});
+        const posts = await Post.findAll({ include : ['images', 'comments', 'tags']});
         res.status(200).json(posts);
         return
     }catch(err)
@@ -55,7 +55,7 @@ const getPosts = async (_, res) => {
 const getAllPostsByUser = async (req, res) => {
     try {
         const id = req.params.id;
-        const posts = await Post.findAll({ where : {id_user : id}, include : ['images']});
+        const posts = await Post.findAll({ where : {id_user : id}, include : ['images', 'comments', 'tags']});
         res.status(200).json(posts);
         return
     }catch(err)
@@ -69,7 +69,7 @@ const getOnePostByUser= async (req, res) => {
     try {
         const id = req.params.id;
         const id_post = req.params.id_post;
-        const post = await Post.findOne({ where : {id_user : id, id: id_post}, include : ['images']});
+        const post = await Post.findOne({ where : {id_user : id, id: id_post}, include : ['images', 'comments', 'tags']});
         res.status(200).json(post);
         return
     }catch(err)
