@@ -17,7 +17,16 @@ module.exports = (sequelize, DataTypes) => {
   Comment.init({
     comentario: { type: DataTypes.STRING, max: 255, allowNull: false },
     fecha_publicacion: { type: DataTypes.DATEONLY, allowNull: false },
-    visible: { type: DataTypes.BOOLEAN, defaultValue: true }
+    visible: { type: DataTypes.BOOLEAN, defaultValue: true },
+    antiguedadMes: { type: DataTypes.VIRTUAL,
+      get() {
+        const hoy = new Date();
+        const publicacion = new Date(this.fecha_publicacion);
+        const meses = (hoy.getFullYear() - publicacion.getFullYear()) * 12
+                      + (hoy.getMonth() - publicacion.getMonth());
+        return meses
+      }
+     }
   }, {
     sequelize,
     modelName: 'Comment',
