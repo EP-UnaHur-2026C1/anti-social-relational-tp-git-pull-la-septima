@@ -2,7 +2,7 @@ const { Post, Post_Images } = require("../db/models");
 
 const createPost = async (req, res) => {
     try {
-        const { texto, images } = req.body
+        const { texto, images, tags } = req.body
         const id_user = req.params.id_user
         const postCreado = await Post.create({
             texto, 
@@ -14,10 +14,12 @@ const createPost = async (req, res) => {
             const url = img.url_image;
             await Post_Images.create({ url_image: url, id_post: postCreado.id });
         }
-      
-      const resultado = await Post.findByPk(postCreado.id, { include : ['images']});
+        
+        await postCreado.addTags(tags)
+    
+        const resultado = await Post.findByPk(postCreado.id, { include : ['images']});
 
-      res.status(201).json(resultado)
+        res.status(201).json(resultado)
 
     }catch(err)
     {

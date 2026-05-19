@@ -17,13 +17,13 @@ app.use('/users', userRouter)
 app.use('/posts', postRouter)
 app.use('/tags', tagRouter)
 app.use('/post_images', postImagesRouter)
-app.use('/comment', commentRouter)
+app.use('/comments', commentRouter)
 
 app.listen(PORT, async (err)=> {
     if(err) {
         console.error(err.message)
         process.exit(1)
     }
-    await sequelize.sync({alter: true})
+    await sequelize.sync({force: true})
     console.log(`App iniciada en el puerto ${PORT}`)
 })
