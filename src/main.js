@@ -17,7 +17,7 @@ app.use('/users', userRouter)
 app.use('/posts', postRouter)
 app.use('/tags', tagRouter)
 app.use('/post_images', postImagesRouter)
-app.use('/comment', commentRouter)
+app.use('/comments', commentRouter)
 
 app.listen(PORT, async (err)=> {
     if(err) {
