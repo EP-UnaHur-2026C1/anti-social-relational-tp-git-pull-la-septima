@@ -63,9 +63,30 @@ const updateComment = async (req, res) => {
     }   
 } 
 
+const updateVisibilityByMonth = async (req, res) => {
+    try{
+        const { mes } = req.body;
+        const comments = await Comment.findAll()
+
+        const promise = comments.map(async (comment) => {
+            const visible = mes > comment.antiguedadMes;
+            return Comment.update({visible}, {where : {id : comment.id}});
+        });
+
+        await Promise.all(promise);
+        res.status(200).json({message: "Comentarios actualizados"});
+        return
+    }catch(err){
+        res.status(500).json({message: `${err}`});
+        return  
+    }
+}
+
+
 module.exports = {
     createComment,
     getCommentsByPost,
     deleteComment,          
-    updateComment
+    updateComment,
+    updateVisibilityByMonth,
 }

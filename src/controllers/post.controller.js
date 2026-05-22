@@ -3,7 +3,7 @@ const { Post, Post_Images } = require("../db/models");
 const createPost = async (req, res) => {
     try {
         const { texto, images, tags } = req.body
-        const id_user = req.params.id_user
+        const id_user = req.params.id
         const postCreado = await Post.create({
             texto, 
             fechaPublicacion: new Date(),
@@ -30,9 +30,9 @@ const createPost = async (req, res) => {
 
 const deletePost = async (req, res) => {
     try{
-        const { id } = req.params
-        const post = await Post.findByPk(id);
-        const deletePost = await Post.destroy({where : {id}});
+        const { id_post } = req.params
+        const post = await Post.findByPk(id_post);
+        const deletePost = await Post.destroy({where : {id_post}});
         res.status(200).json({message: `Post eliminado correctamente`}); 
         return 
     }catch(err)
