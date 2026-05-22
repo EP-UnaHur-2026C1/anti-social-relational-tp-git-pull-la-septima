@@ -33,8 +33,8 @@ const getPostImages = async (req, res) => {
 
 const getPostImageById = async (req, res) => {
     try{
-        const { id_post, id } = req.params
-        const image = await Post_Images.findOne({ where: { id: id, id_post } });
+        const { id_post, id_pi } = req.params
+        const image = await Post_Images.findOne({ where: { id: id_pi, id_post } });
         res.status(200).json(image)
         return
     }catch(err)
@@ -46,9 +46,9 @@ const getPostImageById = async (req, res) => {
 
 const updatePostImage = async (req, res) => {
     try{
-        const { id_post, id } = req.params;
+        const { id_post, id_pi } = req.params;
         const { url_image } = req.body;
-        const image = await Post_Images.findOne({ where : {id : id, id_post}});
+        const image = await Post_Images.findOne({ where : {id : id_pi, id_post}});
         await image.update({ url_image });
         res.status(200).json(image);
         return
@@ -61,9 +61,9 @@ const updatePostImage = async (req, res) => {
 
 const deletePostImage = async (req, res) => {
     try{
-        const { id_post, id } = req.params;
-        const image = await Post_Images.findOne({where : {id : id, id_post}});
-        await Post_Images.destroy({ where: { id } });
+        const { id_post, id_pi } = req.params;
+        const image = await Post_Images.findOne({where : {id : id_pi, id_post}});
+        await Post_Images.destroy({ where: { id : id_pi } });
         res.status(200).json({message: `Imagen eliminada correctamente`}); 
         return 
     }catch(err)
