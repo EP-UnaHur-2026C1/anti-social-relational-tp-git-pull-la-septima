@@ -31,8 +31,7 @@ const createPost = async (req, res) => {
 const deletePost = async (req, res) => {
     try{
         const { id_post } = req.params
-        const post = await Post.findByPk(id_post);
-        const deletePost = await Post.destroy({where : {id_post}});
+        const deletePost = await Post.destroy(id_post);
         res.status(200).json({message: `Post eliminado correctamente`}); 
         return 
     }catch(err)

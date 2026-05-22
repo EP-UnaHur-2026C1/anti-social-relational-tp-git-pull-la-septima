@@ -2,7 +2,7 @@ const { Tag } = require('../db/models')
 
 const createTag = async (req, res) => {
     try {
-        const nombre = req.body
+        const { nombre } = req.body
         await Tag.create(nombre)
         res.status(201).json({ message: "Tag creado exitosamente" })
         return

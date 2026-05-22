@@ -4,7 +4,6 @@ const createPostImage = async (req, res) => {
     try {
         const { url_image } = req.body
         const { id_post } = req.params
-        const post = await Post.findByPk(id_post);
         const image = await Post_Images.create({
             url_image,
             id_post

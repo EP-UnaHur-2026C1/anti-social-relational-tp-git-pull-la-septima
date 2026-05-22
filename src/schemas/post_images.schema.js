@@ -7,7 +7,7 @@ const postImagnesSchema = Joi.object({
     .messages({
         'string.empty' : 'La url de la imagen no puede ser vacia',
         'string.alphanum' : 'La url de la imagen no puede contener espacios',
-        'any.requied' : 'La url de la imagen es obligatoria'
+        'any.required' : 'La url de la imagen es obligatoria'
     })
 })
 

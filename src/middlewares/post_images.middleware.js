@@ -27,7 +27,7 @@ const validatePostByImageId = async (req, res, next) => {
     try {
         const {id_post, id_pi } = req.params
 
-        const validate = await Post_Images.findOne({ where : { id: id_pi } && { id_post : id_post }})
+        const validate = await Post_Images.findOne({ where : { id: id_pi, id_post : id_post }})
 
         if(!validate) {
             res.status(404).json({message: `La imagen con id ${id_pi} no fue encontrada en relacion con el post ${id_post}`})
@@ -37,6 +37,7 @@ const validatePostByImageId = async (req, res, next) => {
         res.status(500).json({message :`${err}`})
         return
     }
+    next()
 }
 
 module.exports = {
