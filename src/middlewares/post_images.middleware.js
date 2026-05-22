@@ -6,14 +6,14 @@ const validateSchemaPostImages = validateSchema(postImagnesSchema)
 
 const validatePostImagestId = async(req, res, next) => {
         try{
-            const {id_post} = req.params
-            if(isNaN(id_post)||parseInt(id_post) <= 0){
+            const {id_pi} = req.params
+            if(isNaN(id_pi)||parseInt(id_pi) <= 0){
                 res.status(400).json({message: 'El id debe ser un numero válido'})
                 return
             }
-            const instance = await Post.findByPk(id_post)
+            const instance = await Post_Images.findByPk(id_pi)
             if (!instance){
-                res.status(404).json({message: `El id ${id_post} no fue encontrado`})
+                res.status(404).json({message: `El id ${id_pi} no fue encontrado`})
                 return
             }
         }catch(err){
