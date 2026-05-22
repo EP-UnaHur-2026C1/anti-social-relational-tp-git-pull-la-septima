@@ -19,9 +19,9 @@ const validateId = (modelo) => {
     }
 }
 
-const validateSchema = (userSchema) => {
+const validateSchema = (Schema) => {
     return (req, res, next) => {
-        const{error} = userSchema.validate(req.body, {
+        const{error} = Schema.validate(req.body, {
             abortEarly:false
         })
         if(error){
