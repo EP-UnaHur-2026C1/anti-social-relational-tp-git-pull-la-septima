@@ -18,9 +18,18 @@ const postSchema = Joi.object({
                     'any.required': 'La url es obligatoria'
             })
         })
+    ),
+
+    tags: Joi.array()
+    .items(
+        Joi.object({
+            nombre: Joi.string().required().messages({
+                'string.empty': 'El nombre de la etiqueta no puede ser vacio',
+                'any.required': 'El nombre de la etiqueta es obligatorio'
+            })
+        })
     )
 })
-    
 
 module.exports = {
     postSchema
