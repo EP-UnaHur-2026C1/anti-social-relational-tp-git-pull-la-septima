@@ -3,8 +3,9 @@ const router = Router();
 const { createPost, deletePost, getPosts, getAllPostsByUser, getOnePostByUser , updatePostByUser} = require('../controllers/post.controller')
 const {  validateSchemaPost,validatePostId,validatePostByUser} = require("../middlewares/post.middleware")
 const { validateUserId} = require("../middlewares/user.middleware")
+const { upload } = require ('../middlewares/upload.middleware')
 
-router.post('/:id',validateSchemaPost,validateUserId, createPost);
+router.post('/:id',upload.array('images', 10) ,validateSchemaPost,validateUserId, createPost);
 router.delete('/:id_post',validatePostId, deletePost);
 router.get('/', getPosts);
 router.get('/user/:id',validateUserId, getAllPostsByUser);

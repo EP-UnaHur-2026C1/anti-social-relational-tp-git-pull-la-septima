@@ -2,10 +2,10 @@ const { Post, Post_Images } = require("../db/models");
 
 const createPostImage = async (req, res) => {
     try {
-        const { url_image } = req.body
+        const file = req.files 
         const { id_post } = req.params
         const image = await Post_Images.create({
-            url_image:`../../media/${url_image}`,
+            url_image:`../../media/${file.filename}`,
             id_post
         });
         res.status(201).json(image);

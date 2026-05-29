@@ -10,15 +10,15 @@ const postSchema = Joi.object({
         'any.required' : 'El texto es obligatorio'
     }),
 
-    images: Joi.array()
-    .items(
-        Joi.object({
-                url_image: Joi.string().required().messages({
-                    'string.empty' : 'La url no puede ser vacia',
-                    'any.required': 'La url es obligatoria'
-            })
-        })
-    ),
+    // images: Joi.array()
+    // .items(
+    //     Joi.object({
+    //             url_image: Joi.string().required().messages({
+    //                 'string.empty' : 'La url no puede ser vacia',
+    //                 'any.required': 'La url es obligatoria'
+    //         })
+    //     })
+    // ),
 
     tags: Joi.array()
     .items(
