@@ -5,9 +5,9 @@ const createPostImage = async (req, res) => {
     try {
         const file = req.files 
         const { id_post } = req.params
-        const filename = `${Date.now()}-${file.originalname}`
+        const path_url = `/media/${file.filename}`
         const image = await Post_Images.create({
-            url_image: `${path.join(__dirname, '../../media/')}${file.filename}`,
+            url_image: path_url,
             id_post
         });
         res.status(201).json(image);

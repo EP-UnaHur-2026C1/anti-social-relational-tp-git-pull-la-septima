@@ -1,5 +1,4 @@
 const { Post, Post_Images } = require("../db/models");
-const path = require('path')
 
 const createPost = async (req, res) => {
     try {
@@ -13,8 +12,7 @@ const createPost = async (req, res) => {
         });
         
         for (const img of images) { 
-            const filename = `${Date.now()}-${img.originalname}`
-            const path_url = `${path.join(__dirname, '../../media/')}${filename}`
+            const path_url = `/media/${file.filename}`
             await Post_Images.create({ url_image: path_url, id_post: postCreado.id });   
         }
         
