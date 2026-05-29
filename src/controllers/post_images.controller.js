@@ -1,12 +1,13 @@
 const { Post, Post_Images } = require("../db/models");
+const path = require('path')
 
 const createPostImage = async (req, res) => {
     try {
-        const { url_image } = req.body
+        const file = req.files 
         const { id_post } = req.params
-        const post = await Post.findByPk(id_post);
+        const path_url = `/media/${file.filename}`
         const image = await Post_Images.create({
-            url_image,
+            url_image: path_url,
             id_post
         });
         res.status(201).json(image);

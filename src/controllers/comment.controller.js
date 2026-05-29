@@ -1,4 +1,3 @@
-const { where } = require('sequelize');
 const { Comment } = require('../db/models');
 
 const createComment = async (req, res) => {

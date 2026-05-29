@@ -2,17 +2,18 @@ const { Post, Post_Images } = require("../db/models");
 
 const createPost = async (req, res) => {
     try {
-        const { texto, images, tags } = req.body
+        const { texto, tags } = req.body
         const id_user = req.params.id
+        const images = req.files || [] 
         const postCreado = await Post.create({
             texto, 
             fechaPublicacion: new Date(),
             id_user
         });
-
+        
         for (const img of images) { 
-            const url = img.url_image;
-            await Post_Images.create({ url_image: url, id_post: postCreado.id });
+            const path_url = `/media/${file.filename}`
+            await Post_Images.create({ url_image: path_url, id_post: postCreado.id });   
         }
         
         await postCreado.addTags(tags)
@@ -31,8 +32,7 @@ const createPost = async (req, res) => {
 const deletePost = async (req, res) => {
     try{
         const { id_post } = req.params
-        const post = await Post.findByPk(id_post);
-        const deletePost = await Post.destroy({where : {id_post}});
+        const deletePost = await Post.destroy(id_post);
         res.status(200).json({message: `Post eliminado correctamente`}); 
         return 
     }catch(err)

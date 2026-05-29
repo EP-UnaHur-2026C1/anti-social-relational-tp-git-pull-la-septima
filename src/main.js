@@ -7,7 +7,6 @@ const postRouter = require('./routes/post.routes');
 const tagRouter = require('./routes/tag.routes');
 const postImagesRouter = require('./routes/post_images.routes');
 const commentRouter = require('./routes/comment.routes');
-const { FORCE } = require('sequelize/lib/index-hints');
 dotenv.config()
 const PORT = process.env.PORT || 3001
 
@@ -24,6 +23,6 @@ app.listen(PORT, async (err)=> {
         console.error(err.message)
         process.exit(1)
     }
-    await sequelize.sync({force: false})
+    await sequelize.sync({alter: false})
     console.log(`App iniciada en el puerto ${PORT}`)
 })
