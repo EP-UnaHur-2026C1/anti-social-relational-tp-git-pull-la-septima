@@ -10,6 +10,8 @@ const fileFilter = (req, file, cb) => {
     cb( ok ? null : new Error('Formato inválido', ok));
 }
 
-module.exports = multer({ storageMulter ,fileFilter, 
+const upload = multer({ storageMulter ,fileFilter, 
     limits:{ fileSize: 5 * 1024 * 1024 }
  })
+
+module.exports = { upload }
