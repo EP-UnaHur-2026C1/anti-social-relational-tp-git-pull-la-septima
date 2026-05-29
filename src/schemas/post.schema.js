@@ -22,13 +22,15 @@ const postSchema = Joi.object({
 
     tags: Joi.array()
     .items(
-        Joi.object({
-            nombre: Joi.string().required().messages({
-                'string.empty': 'El nombre de la etiqueta no puede ser vacio',
-                'any.required': 'El nombre de la etiqueta es obligatorio'
-            })
-        })
-    )
+        Joi.number().integer().positive().messages({
+        'number.base': 'El id de tag debe ser número',
+        'number.integer': 'El id debe ser entero',
+        'number.positive': 'El id debe ser positivo'
+    })
+  )
+  .messages({
+    'array.base': 'tags debe ser un array'
+  })
 })
 
 module.exports = {
