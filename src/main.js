@@ -1,7 +1,5 @@
 const express = require('express');
 const app = express();
-const multer = require("multer");
-const upload = multer()
 const {sequelize} = require('./db/models')
 const dotenv = require('dotenv');
 const userRouter = require('./routes/user.routes');
