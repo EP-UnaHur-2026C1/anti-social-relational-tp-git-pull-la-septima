@@ -2,8 +2,9 @@ const { Post, Post_Images } = require("../db/models");
 
 const createPost = async (req, res) => {
     try {
-        const { texto, images, tags } = req.body
+        const { texto, tags } = req.body
         const id_user = req.params.id
+        const images = req.files || [] 
         const postCreado = await Post.create({
             texto, 
             fechaPublicacion: new Date(),
@@ -11,8 +12,7 @@ const createPost = async (req, res) => {
         });
 
         for (const img of images) { 
-            const url = img.url_image;
-            await Post_Images.create({ url_image: url, id_post: postCreado.id });
+            await Post_Images.create({ url_image: img.filename, id_post: postCreado.id });
         }
         
         await postCreado.addTags(tags)

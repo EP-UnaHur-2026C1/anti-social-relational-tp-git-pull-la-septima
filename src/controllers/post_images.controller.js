@@ -5,7 +5,7 @@ const createPostImage = async (req, res) => {
         const { url_image } = req.body
         const { id_post } = req.params
         const image = await Post_Images.create({
-            url_image,
+            url_image:`../../media/${url_image}`,
             id_post
         });
         res.status(201).json(image);
