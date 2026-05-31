@@ -49,9 +49,12 @@ const getPostImageById = async (req, res) => {
 const updatePostImage = async (req, res) => {
     try{
         const { id_post, id_pi } = req.params;
-        const { url_image } = req.body;
+        const file = req.files;
         const image = await Post_Images.findOne({ where : {id : id_pi, id_post}});
-        await image.update({ url_image });
+        const urldel = path.join(__dirname, '..', '..', image.url_image);
+        await fs.unlink(urldel);
+        const newImagen = `/media/${file.filename}`;
+        await image.update({ url_image: newImagen });
         res.status(200).json(image);
         return
     }catch(err)
