@@ -1,5 +1,6 @@
 const { Post, Post_Images } = require("../db/models");
-const path = require('path')
+const path = require('path');
+const fs = require('fs').promises;
 
 const createPostImage = async (req, res) => {
     try {
@@ -64,6 +65,8 @@ const deletePostImage = async (req, res) => {
     try{
         const { id_post, id_pi } = req.params;
         const image = await Post_Images.findOne({where : {id : id_pi, id_post}});
+        const urldel = path.join(__dirname, '..', '..', image.url_image);       
+        await fs.unlink(urldel);
         await Post_Images.destroy({ where: { id : id_pi } });
         res.status(200).json({message: `Imagen eliminada correctamente`}); 
         return 
