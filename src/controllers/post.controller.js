@@ -1,4 +1,6 @@
 const { Post, Post_Images } = require("../db/models");
+const path = require('path');
+const fs = require('fs').promises;
 
 const createPost = async (req, res) => {
     try {
@@ -9,11 +11,13 @@ const createPost = async (req, res) => {
             texto, 
             fechaPublicacion: new Date(),
             id_user
-        });
-        
-        for (const img of images) { 
-            const path_url = `/media/${img.filename}`
-            await Post_Images.create({ url_image: path_url, id_post: postCreado.id });   
+        });      
+
+        if (images.length > 0) {
+            await Promise.all(images.map(img => {
+                const path_url = `/media/${img.filename}`;
+                return Post_Images.create({ url_image: path_url, id_post: postCreado.id });
+            }));
         }
         
         await postCreado.addTags(tags)
@@ -32,6 +36,13 @@ const createPost = async (req, res) => {
 const deletePost = async (req, res) => {
     try{
         const { id_post } = req.params
+        const images = await Post_Images.findAll({ where: { id_post } });
+        await Promise.all(images.map(img => { 
+            const filepath = path.join(__dirname, '../../media', path.basename(img.url_image));
+            return fs.unlink(filepath)
+        }   
+        ));
+        const deletePostImage =  await Post_Images.destroy({ where: { id_post } });
         const deletePost = await Post.destroy(id_post);
         res.status(200).json({message: `Post eliminado correctamente`}); 
         return 
