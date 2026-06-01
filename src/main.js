@@ -1,5 +1,5 @@
 const express = require('express');
-const path = requiere('path');
+const path = require('path');
 const app = express();
 const {sequelize} = require('./db/models')
 const dotenv = require('dotenv');
