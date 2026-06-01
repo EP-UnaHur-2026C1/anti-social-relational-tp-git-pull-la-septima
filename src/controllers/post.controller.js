@@ -43,7 +43,7 @@ const deletePost = async (req, res) => {
         }   
         ));
         const deletePostImage =  await Post_Images.destroy({ where: { id_post } });
-        const deletePost = await Post.destroy(id_post);
+        const deletePost = await Post.destroy({ where: { id: id_post } });
         res.status(200).json({message: `Post eliminado correctamente`}); 
         return 
     }catch(err)
