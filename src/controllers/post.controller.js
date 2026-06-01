@@ -20,9 +20,12 @@ const createPost = async (req, res) => {
             }));
         }
         
-        await postCreado.addTags(tags)
+        if (Array.isArray(tags) && tags.length > 0) {
+            await postCreado.addTags(tags)
+        }
+        
     
-        const resultado = await Post.findByPk(postCreado.id, { include : ['images']});
+        const resultado = await Post.findByPk(postCreado.id, { include : ['images' , 'comments', 'tags']});
 
         res.status(201).json(resultado)
 
@@ -43,7 +46,7 @@ const deletePost = async (req, res) => {
         }   
         ));
         const deletePostImage =  await Post_Images.destroy({ where: { id_post } });
-        const deletePost = await Post.destroy(id_post);
+        const deletePost = await Post.destroy({ where: { id: id_post } });
         res.status(200).json({message: `Post eliminado correctamente`}); 
         return 
     }catch(err)

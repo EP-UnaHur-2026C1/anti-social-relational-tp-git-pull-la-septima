@@ -4,9 +4,12 @@ const fs = require('fs').promises;
 
 const createPostImage = async (req, res) => {
     try {
-        const file = req.file
-        const { id_post } = req.params
-        const path_url = `/media/${file.filename}`
+        const file = req.file;
+        if (!file) {
+            return res.status(400).json({ message: "Se requiere un archivo de imagen" });
+        } 
+        const { id_post } = req.params;
+        const path_url = `/media/${file.filename}`;
         const image = await Post_Images.create({
             url_image: path_url,
             id_post
@@ -16,7 +19,7 @@ const createPostImage = async (req, res) => {
     }catch(err)
     {
         res.status(500).json({message: `${err}`});
-        return
+        return;
     }
 }
 
@@ -24,12 +27,12 @@ const getPostImages = async (req, res) => {
     try{
         const { id_post } = req.params;
         const images = await Post_Images.findAll({ where: { id_post } });
-        res.status(200).json(images)
+        res.status(200).json(images);
         return
     }catch(err)
     {
         res.status(500).json({message: `${err}`});
-        return
+        return;
     }
 }
 
@@ -42,7 +45,7 @@ const getPostImageById = async (req, res) => {
     }catch(err)
     {
         res.status(500).json({message: `${err}`});
-        return
+        return;
     }
 }
 
@@ -50,19 +53,21 @@ const updatePostImage = async (req, res) => {
     try{
         const { id_post, id_pi } = req.params;
         const file = req.file;
-        const oldImage = await Post_Images.findOne({ where : {id : id_pi, id_post}});
-        const urldel = path.join(__dirname, '..', '..', oldImage.url_image);
-        await fs.unlink(urldel);
+        if (!file) {
+            res.status(400).json({ message: "Se requiere un archivo de imagen" });
+            return;
+        }
+        const oldImage = await Post_Images.findOne({ where: { id: id_pi, id_post } });
         const newPath = `/media/${file.filename}`;
-        console.log('aca')
-        const newImage = await Post_Images.update({ url_image: newPath  } , { where : {id : oldImage.id } });
-        console.log('aca 2')
-        res.status(200).json({message : 'La imagen fue actualizada correctamente'});
-        return
+        const oldDiskPath = path.join(__dirname, '..', '..', oldImage.url_image);
+        await oldImage.update({ url_image: newPath });
+        await fs.unlink(oldDiskPath);
+        res.status(200).json(oldImage);
+        return;
     }catch(err)
     {
         res.status(500).json({message: `${err}`});
-        return
+        return;
     }
 }
 
@@ -71,8 +76,8 @@ const deletePostImage = async (req, res) => {
         const { id_post, id_pi } = req.params;
         const image = await Post_Images.findOne({where : {id : id_pi, id_post}});
         const urldel = path.join(__dirname, '..', '..', image.url_image);       
-        await fs.unlink(urldel);
         await Post_Images.destroy({ where: { id : id_pi } });
+        await fs.unlink(urldel);
         res.status(200).json({message: `Imagen eliminada correctamente`}); 
         return 
     }catch(err)

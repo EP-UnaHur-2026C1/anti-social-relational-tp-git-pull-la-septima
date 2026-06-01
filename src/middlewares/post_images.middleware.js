@@ -16,12 +16,12 @@ const validatePostImagestId = async(req, res, next) => {
                 res.status(404).json({message: `El id ${id_pi} no fue encontrado`})
                 return
             }
+            next();
         }catch(err){
             res.status(500).json(`${err}`)
             return
         }
-        next()
-}
+    }
 
 const validatePostByImageId = async (req, res, next) => {
     try {
@@ -33,11 +33,12 @@ const validatePostByImageId = async (req, res, next) => {
             res.status(404).json({message: `La imagen con id ${id_pi} no fue encontrada en relacion con el post ${id_post}`})
             return
         }
+        next();
     } catch(err) {
         res.status(500).json({message :`${err}`})
         return
     }
-    next()
+    
 }
 
 module.exports = {
