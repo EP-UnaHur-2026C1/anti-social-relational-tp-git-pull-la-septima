@@ -37,16 +37,18 @@ const getCommentsByPost = async (req, res) => {
 
 const deleteComment = async (req, res) => {
     try {
-        const id = req.params.id; 
+        const id = req.params.id;
         const comment = await Comment.findByPk(id);
-        const commentDeleted = await comment.destroy({where : {id}});
-        res.status(200).json({message: ` El Comentario : ${comment.comentario} eliminado`});
+        const textoComment = comment.comentario;
+        await comment.destroy();
+        res.status(200).json({ message: `El Comentario: ${textoComment} eliminado` });
         return 
-    }catch(err){
-        res.status(500).json({message: `${err}`});
-        return  
+    } catch (err) {
+        res.status(500).json({ message: `${err}` });
+        return 
     }
-}   
+};
+
 
 const updateComment = async (req, res) => {
     try {
