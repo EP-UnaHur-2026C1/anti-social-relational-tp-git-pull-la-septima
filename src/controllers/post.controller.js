@@ -12,7 +12,7 @@ const createPost = async (req, res) => {
         });
         
         for (const img of images) { 
-            const path_url = `/media/${file.filename}`
+            const path_url = `/media/${img.filename}`
             await Post_Images.create({ url_image: path_url, id_post: postCreado.id });   
         }
         

@@ -12,6 +12,6 @@ router.post('/user/:id/post/:id_post/images', upload.single('image') , validateI
 router.get('/user/:id/post/:id_post/images', validateIdsAndPostByUser, getPostImages);
 router.get('/user/:id/post/:id_post/images/:id_pi', validateIdsAndPostByUser, validatePostImagestId, validatePostByImageId, getPostImageById);
 router.delete('/user/:id/post/:id_post/images/:id_pi', validateIdsAndPostByUser, validatePostImagestId, validatePostByImageId, deletePostImage);
-// router.put('/user/:id/post/:id_post/images/:id_pi', validateSchemaPostImages, validateIdsAndPostByUser, validatePostImagestId, validatePostByImageId,  updatePostImage);
+router.put('/user/:id/post/:id_post/images/:id_pi', upload.single('file'), validateIdsAndPostByUser, validatePostImagestId, validatePostByImageId,  updatePostImage);
 
 module.exports = router;

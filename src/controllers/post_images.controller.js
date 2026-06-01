@@ -4,7 +4,7 @@ const fs = require('fs').promises;
 
 const createPostImage = async (req, res) => {
     try {
-        const file = req.files 
+        const file = req.file
         const { id_post } = req.params
         const path_url = `/media/${file.filename}`
         const image = await Post_Images.create({
@@ -49,13 +49,15 @@ const getPostImageById = async (req, res) => {
 const updatePostImage = async (req, res) => {
     try{
         const { id_post, id_pi } = req.params;
-        const file = req.files;
-        const image = await Post_Images.findOne({ where : {id : id_pi, id_post}});
-        const urldel = path.join(__dirname, '..', '..', image.url_image);
+        const file = req.file;
+        const oldImage = await Post_Images.findOne({ where : {id : id_pi, id_post}});
+        const urldel = path.join(__dirname, '..', '..', oldImage.url_image);
         await fs.unlink(urldel);
-        const newImagen = `/media/${file.filename}`;
-        await image.update({ url_image: newImagen });
-        res.status(200).json(image);
+        const newPath = `/media/${file.filename}`;
+        console.log('aca')
+        const newImage = await Post_Images.update({ url_image: newPath  } , { where : {id : oldImage.id } });
+        console.log('aca 2')
+        res.status(200).json({message : 'La imagen fue actualizada correctamente'});
         return
     }catch(err)
     {
