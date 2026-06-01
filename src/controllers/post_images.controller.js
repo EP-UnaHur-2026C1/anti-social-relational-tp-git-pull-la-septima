@@ -4,9 +4,12 @@ const fs = require('fs').promises;
 
 const createPostImage = async (req, res) => {
     try {
-        const file = req.file
-        const { id_post } = req.params
-        const path_url = `/media/${file.filename}`
+        const file = req.file;
+        if (!file) {
+            return res.status(400).json({ message: "Se requiere un archivo de imagen" });
+        } 
+        const { id_post } = req.params;
+        const path_url = `/media/${file.filename}`;
         const image = await Post_Images.create({
             url_image: path_url,
             id_post
@@ -24,7 +27,7 @@ const getPostImages = async (req, res) => {
     try{
         const { id_post } = req.params;
         const images = await Post_Images.findAll({ where: { id_post } });
-        res.status(200).json(images)
+        res.status(200).json(images);
         return
     }catch(err)
     {
