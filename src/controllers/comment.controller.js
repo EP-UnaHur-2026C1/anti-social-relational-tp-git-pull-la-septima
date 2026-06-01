@@ -65,23 +65,21 @@ const updateComment = async (req, res) => {
 };
 
 const updateVisibilityByMonth = async (req, res) => {
-    try{
-        const { mes } = req.body;
-        const comments = await Comment.findAll()
+    try {
+        const mes = (req.body && req.body.mes) ? req.body.mes : MESES_VISIBILIDAD;
+        const comments = await Comment.findAll();
 
-        const promise = comments.map(async (comment) => {
-            const visible = mes > comment.antiguedadMes;
-            return Comment.update({visible}, {where : {id : comment.id}});
+        const promises = comments.map(async (comment) => {
+            const visible = comment.antiguedadMes < mes;
+            return Comment.update({ visible }, { where: { id: comment.id } });
         });
 
-        await Promise.all(promise);
-        res.status(200).json({message: "Comentarios actualizados"});
-        return
-    }catch(err){
-        res.status(500).json({message: `${err}`});
-        return  
+        await Promise.all(promises);
+        return res.status(200).json({ message: "Comentarios actualizados", mesesUsados: mes });
+    } catch (err) {
+        return res.status(500).json({ message: `${err}` });
     }
-}
+};
 
 
 module.exports = {
