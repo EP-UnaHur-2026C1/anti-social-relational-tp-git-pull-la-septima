@@ -66,7 +66,7 @@ const updateComment = async (req, res) => {
 
 const updateVisibilityByMonth = async (req, res) => {
     try {
-        const mes = (req.body && req.body.mes) ? req.body.mes : MESES_VISIBILIDAD;
+        const mes =  MESES_VISIBILIDAD;
         const comments = await Comment.findAll();
 
         const promises = comments.map(async (comment) => {

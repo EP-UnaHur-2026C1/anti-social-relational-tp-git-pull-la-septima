@@ -437,25 +437,24 @@ paths:
       tags: [Comments]
       summary: Recalcular visibilidad de comentarios por antigüedad (en meses)
       description: |
-        Marca como `visible:false` los comentarios con antigüedad mayor o igual al valor `mes`.
-        Si no se envía `mes` en el body, se usa la variable de entorno `MESES_VISIBILIDAD` (default 6).
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [mes]
-              properties:
-                mes:
-                  type: integer
-                  minimum: 1
-                  example: 6
+        Marca como `visible:false` los comentarios cuya antigüedad en meses es mayor o igual
+        al valor definido en la variable de entorno `MESES_VISIBILIDAD` (default 6).
+        No requiere body.
       responses:
         '200':
           description: Visibilidad recalculada
-        '400':
-          $ref: '#/components/responses/BadRequest'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Comentarios actualizados
+                  mesesUsados:
+                    type: integer
+                    description: Valor de MESES_VISIBILIDAD utilizado en la operación
+                    example: 6
 
   # ============================================================
   # TAGS
