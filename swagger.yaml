@@ -1,0 +1,479 @@
+openapi: 3.0.3
+info:
+  title: UnaHur Anti-Social Net API
+  description: API REST para red social. TP de Estrategias de Persistencia.
+  version: 1.0.0
+  contact:
+    name: git pull la septima
+servers:
+  - url: http://localhost:3000
+    description: Servidor de desarrollo
+
+tags:
+  - name: Users
+    description: Gestión de usuarios
+  - name: Posts
+    description: Publicaciones de los usuarios
+  - name: Post Images
+    description: Imágenes asociadas a un post
+  - name: Comments
+    description: Comentarios sobre posts
+  - name: Tags
+    description: Etiquetas para categorizar posts
+
+paths:
+  # ==================== USERS ====================
+  /users:
+    get:
+      tags: [Users]
+      summary: Listar todos los usuarios
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/User' }
+    post:
+      tags: [Users]
+      summary: Crear un usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UserInput' }
+      responses:
+        '201': { description: Usuario creado, content: { application/json: { schema: { $ref: '#/components/schemas/User' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+
+  /users/{id}:
+    parameters:
+      - $ref: '#/components/parameters/UserId'
+    get:
+      tags: [Users]
+      summary: Obtener usuario por ID
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/User' } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Users]
+      summary: Actualizar usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UserInput' }
+      responses:
+        '200': { description: Usuario actualizado }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Users]
+      summary: Eliminar usuario
+      responses:
+        '200': { description: Usuario eliminado }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # ==================== POSTS ====================
+  /posts:
+    get:
+      tags: [Posts]
+      summary: Listar todos los posts (con imágenes, comentarios y tags)
+      responses:
+        '200':
+          description: Lista de posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Post' }
+
+  /posts/{id}:
+    parameters:
+      - $ref: '#/components/parameters/UserId'
+    post:
+      tags: [Posts]
+      summary: Crear un post para el usuario (con imágenes opcionales)
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [texto]
+              properties:
+                texto:
+                  type: string
+                  example: "Mi primer post!"
+                tags:
+                  type: array
+                  description: IDs de tags a asociar
+                  items: { type: integer }
+                images:
+                  type: array
+                  description: Hasta 10 imágenes (jpg/png/webp, max 5MB c/u)
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '201': { description: Post creado, content: { application/json: { schema: { $ref: '#/components/schemas/Post' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+
+  /posts/{id_post}:
+    parameters:
+      - $ref: '#/components/parameters/PostId'
+    delete:
+      tags: [Posts]
+      summary: Eliminar un post (borra imágenes y comentarios en cascada)
+      responses:
+        '200': { description: Post eliminado }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /posts/user/{id}:
+    parameters:
+      - $ref: '#/components/parameters/UserId'
+    get:
+      tags: [Posts]
+      summary: Listar posts de un usuario
+      responses:
+        '200':
+          description: Posts del usuario
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Post' }
+
+  /posts/user/{id}/post/{id_post}:
+    parameters:
+      - $ref: '#/components/parameters/UserId'
+      - $ref: '#/components/parameters/PostId'
+    get:
+      tags: [Posts]
+      summary: Obtener un post específico de un usuario
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Post' } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Posts]
+      summary: Actualizar el texto de un post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [texto]
+              properties:
+                texto: { type: string, example: "Texto actualizado" }
+      responses:
+        '200': { description: Post actualizado }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # ==================== POST IMAGES ====================
+  /post_images/user/{id}/post/{id_post}/images:
+    parameters:
+      - $ref: '#/components/parameters/UserId'
+      - $ref: '#/components/parameters/PostId'
+    get:
+      tags: [Post Images]
+      summary: Listar imágenes de un post
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/PostImage' }
+    post:
+      tags: [Post Images]
+      summary: Agregar una imagen a un post
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [image]
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '201': { description: Imagen creada, content: { application/json: { schema: { $ref: '#/components/schemas/PostImage' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+
+  /post_images/user/{id}/post/{id_post}/images/{id_pi}:
+    parameters:
+      - $ref: '#/components/parameters/UserId'
+      - $ref: '#/components/parameters/PostId'
+      - $ref: '#/components/parameters/PostImageId'
+    get:
+      tags: [Post Images]
+      summary: Obtener una imagen
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/PostImage' } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Post Images]
+      summary: Reemplazar archivo de una imagen
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [image]
+              properties:
+                image: { type: string, format: binary }
+      responses:
+        '200': { description: Imagen actualizada }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Post Images]
+      summary: Eliminar una imagen (también borra archivo del disco)
+      responses:
+        '200': { description: Imagen eliminada }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # ==================== COMMENTS ====================
+  /comments/user/{id_user}/post/{id_post}:
+    parameters:
+      - name: id_user
+        in: path
+        required: true
+        schema: { type: integer }
+      - $ref: '#/components/parameters/PostId'
+    post:
+      tags: [Comments]
+      summary: Crear comentario en un post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [comentario]
+              properties:
+                comentario: { type: string, example: "Buen post!" }
+      responses:
+        '201': { description: Comentario creado }
+        '400': { $ref: '#/components/responses/BadRequest' }
+
+  /comments/post/{id_post}:
+    parameters:
+      - $ref: '#/components/parameters/PostId'
+    get:
+      tags: [Comments]
+      summary: Listar comentarios visibles de un post
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Comment' }
+
+  /comments/delete/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: integer }
+    delete:
+      tags: [Comments]
+      summary: Eliminar un comentario
+      responses:
+        '200': { description: Comentario eliminado }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /comments/update/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: integer }
+    put:
+      tags: [Comments]
+      summary: Actualizar texto de un comentario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [comentario]
+              properties:
+                comentario: { type: string }
+      responses:
+        '200': { description: Comentario actualizado }
+
+  /comments/updateVisibility:
+    patch:
+      tags: [Comments]
+      summary: Recalcular visibilidad por antigüedad (en meses)
+      description: Si no se envía `mes` en el body, usa la variable de entorno `MESES_VISIBILIDAD` (default 6).
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mes:
+                  type: integer
+                  description: Comentarios con antigüedad >= mes pasan a no visibles
+                  example: 6
+      responses:
+        '200': { description: Visibilidad recalculada }
+
+  # ==================== TAGS ====================
+  /tags:
+    get:
+      tags: [Tags]
+      summary: Listar tags
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Tag' }
+    post:
+      tags: [Tags]
+      summary: Crear tag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TagInput' }
+      responses:
+        '201': { description: Tag creado }
+
+  /tags/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: integer }
+    get:
+      tags: [Tags]
+      summary: Obtener tag por ID
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Tag' } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Tags]
+      summary: Actualizar tag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TagInput' }
+      responses:
+        '200': { description: Tag actualizado }
+    delete:
+      tags: [Tags]
+      summary: Eliminar tag
+      responses:
+        '200': { description: Tag eliminado }
+
+# ==================== COMPONENTS ====================
+components:
+  parameters:
+    UserId:
+      name: id
+      in: path
+      required: true
+      description: ID del usuario
+      schema: { type: integer, minimum: 1 }
+    PostId:
+      name: id_post
+      in: path
+      required: true
+      description: ID del post
+      schema: { type: integer, minimum: 1 }
+    PostImageId:
+      name: id_pi
+      in: path
+      required: true
+      description: ID de la imagen
+      schema: { type: integer, minimum: 1 }
+
+  responses:
+    BadRequest:
+      description: Datos inválidos
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: Recurso no encontrado
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        nickname: { type: string, example: "cris" }
+    UserInput:
+      type: object
+      required: [nickname]
+      properties:
+        nickname: { type: string, example: "cris" }
+
+    Post:
+      type: object
+      properties:
+        id: { type: integer }
+        texto: { type: string }
+        id_user: { type: integer }
+        fechaPublicacion: { type: string, format: date-time }
+        images:
+          type: array
+          items: { $ref: '#/components/schemas/PostImage' }
+        comments:
+          type: array
+          items: { $ref: '#/components/schemas/Comment' }
+        tags:
+          type: array
+          items: { $ref: '#/components/schemas/Tag' }
+
+    PostImage:
+      type: object
+      properties:
+        id: { type: integer }
+        url_image: { type: string, example: "/media/1716580000000-foto.jpg" }
+        id_post: { type: integer }
+
+    Comment:
+      type: object
+      properties:
+        id: { type: integer }
+        comentario: { type: string }
+        fecha_publicacion: { type: string, format: date-time }
+        visible: { type: boolean }
+        antiguedadMes: { type: integer, description: "Meses desde la publicación (campo virtual)" }
+        id_user: { type: integer }
+        id_post: { type: integer }
+
+    Tag:
+      type: object
+      properties:
+        id: { type: integer }
+        nombre: { type: string, example: "humor" }
+    TagInput:
+      type: object
+      required: [nombre]
+      properties:
+        nombre: { type: string, example: "humor" }
+
+    Error:
+      type: object
+      properties:
+        message: { type: string }

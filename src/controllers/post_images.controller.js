@@ -1,9 +1,10 @@
 const { Post, Post_Images } = require("../db/models");
-const path = require('path')
+const path = require('path');
+const fs = require('fs').promises;
 
 const createPostImage = async (req, res) => {
     try {
-        const file = req.files 
+        const file = req.file
         const { id_post } = req.params
         const path_url = `/media/${file.filename}`
         const image = await Post_Images.create({
@@ -48,10 +49,15 @@ const getPostImageById = async (req, res) => {
 const updatePostImage = async (req, res) => {
     try{
         const { id_post, id_pi } = req.params;
-        const { url_image } = req.body;
-        const image = await Post_Images.findOne({ where : {id : id_pi, id_post}});
-        await image.update({ url_image });
-        res.status(200).json(image);
+        const file = req.file;
+        const oldImage = await Post_Images.findOne({ where : {id : id_pi, id_post}});
+        const urldel = path.join(__dirname, '..', '..', oldImage.url_image);
+        await fs.unlink(urldel);
+        const newPath = `/media/${file.filename}`;
+        console.log('aca')
+        const newImage = await Post_Images.update({ url_image: newPath  } , { where : {id : oldImage.id } });
+        console.log('aca 2')
+        res.status(200).json({message : 'La imagen fue actualizada correctamente'});
         return
     }catch(err)
     {
@@ -64,6 +70,8 @@ const deletePostImage = async (req, res) => {
     try{
         const { id_post, id_pi } = req.params;
         const image = await Post_Images.findOne({where : {id : id_pi, id_post}});
+        const urldel = path.join(__dirname, '..', '..', image.url_image);       
+        await fs.unlink(urldel);
         await Post_Images.destroy({ where: { id : id_pi } });
         res.status(200).json({message: `Imagen eliminada correctamente`}); 
         return 
