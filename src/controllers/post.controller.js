@@ -20,9 +20,12 @@ const createPost = async (req, res) => {
             }));
         }
         
-        await postCreado.addTags(tags)
+        if (Array.isArray(tags) && tags.length > 0) {
+            await postCreado.addTags(tags)
+        }
+        
     
-        const resultado = await Post.findByPk(postCreado.id, { include : ['images']});
+        const resultado = await Post.findByPk(postCreado.id, { include : ['images' , 'comments', 'tags']});
 
         res.status(201).json(resultado)
 
