@@ -9,24 +9,25 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      Comment.belongsTo(models.User, {foreignKey : 'id_user', as : 'user'}),
-      Comment.belongsTo(models.Post, { foreignKey : 'id_post', as : 'post'})
+     static associate(models) {
+      Comment.belongsTo(models.User, { foreignKey: 'id_user', as: 'user' });
+      Comment.belongsTo(models.Post, { foreignKey: 'id_post', as: 'post' });
     }
   }
   Comment.init({
-    comentario: { type: DataTypes.STRING, max: 255, allowNull: false },
-    fecha_publicacion: { type: DataTypes.DATEONLY, allowNull: false },
+    comentario: { type: DataTypes.STRING(255), allowNull: false },
+    fecha_publicacion: { type: DataTypes.DATE, allowNull: false },
     visible: { type: DataTypes.BOOLEAN, defaultValue: true },
-    antiguedadMes: { type: DataTypes.VIRTUAL,
+    antiguedadMes: {
+      type: DataTypes.VIRTUAL,
       get() {
         const hoy = new Date();
         const publicacion = new Date(this.fecha_publicacion);
         const meses = (hoy.getFullYear() - publicacion.getFullYear()) * 12
-                      + (hoy.getMonth() - publicacion.getMonth());
-        return meses
+                    + (hoy.getMonth() - publicacion.getMonth());
+        return meses;
       }
-     }
+    }
   }, {
     sequelize,
     modelName: 'Comment',
