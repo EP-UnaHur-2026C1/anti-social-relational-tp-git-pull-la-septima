@@ -1,0 +1,13 @@
+2. ¿Cómo modelarías que un usuario pueda "seguir" a otros usuarios, y a su vez ser seguido por muchos? Followers
+
+Se modela con una relación muchos a muchos sobre la misma tabla Users, usando una tabla intermedia followers con dos columnas: followerId y followingId, 
+ambas claves foráneas que apuntan a Users.id. Así un usuario puede seguir a muchos y ser seguido por muchos a la vez. 
+En Sequelize se implementa con belongsToMany apuntando al mismo modelo con dos alias distintos: following y followers.
+
+3. Como la información de los post no varía muy seguido ¿Qué estrategias podrían utilizar para que la información no sea constantemente 
+consultada desde la base de datos?
+
+
+Como los posts no cambian frecuentemente, se puede aplicar caché en memoria: la primera vez que se piden los posts se guarda el resultado en una variable 
+(un Map con TTL), y las siguientes solicitudes devuelven ese valor sin consultar la base de datos. La clave es invalidar la caché cada vez que se crea, 
+edita o elimina un post
